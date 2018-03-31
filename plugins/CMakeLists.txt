@@ -58,6 +58,8 @@ if(WIN32 OR APPLE)
 		endif()
 	endif()
 
+	add_subdirectory(jim-browser)
+
 	if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/obs-vst/CMakeLists.txt")
 		add_subdirectory(obs-vst)
 	else()
