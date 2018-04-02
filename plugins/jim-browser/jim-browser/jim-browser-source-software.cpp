@@ -1,9 +1,6 @@
 #include "jim-browser-source.hpp"
-#include "browser-render-handler.hpp"
-#include "browser-load-handler.hpp"
 #include "browser-scheme.hpp"
 #include "browser-client.hpp"
-#include "browser-task.hpp"
 #include "browser-app.hpp"
 #include <util/threading.h>
 #include <util/util.hpp>
@@ -51,12 +48,7 @@ void BrowserSource::CreateBrowser()
 
 	QueueCEFTask([&] ()
 	{
-		CefRefPtr<BrowserRenderHandler> renderHandler =
-			new BrowserRenderHandler(this);
-		CefRefPtr<BrowserLoadHandler> loadHandler =
-			new BrowserLoadHandler(css);
-		CefRefPtr<BrowserClient> browserClient =
-			new BrowserClient(renderHandler, loadHandler);
+		CefRefPtr<BrowserClient> browserClient = new BrowserClient(this);
 
 		CefWindowInfo windowInfo;
 #if CHROME_VERSION_BUILD < 3071

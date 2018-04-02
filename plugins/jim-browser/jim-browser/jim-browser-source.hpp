@@ -2,6 +2,7 @@
 
 #include <obs-module.h>
 #include <string>
+#include <functional>
 
 struct BrowserSource {
 	obs_source_t   *source                  = nullptr;
@@ -46,3 +47,5 @@ struct BrowserSource {
 	void Update(obs_data_t *settings = nullptr);
 	void Render();
 };
+
+extern void QueueCEFTask(std::function<void()> task);
