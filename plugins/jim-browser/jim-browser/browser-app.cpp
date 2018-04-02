@@ -44,26 +44,22 @@ void BrowserApp::OnContextCreated(CefRefPtr<CefBrowser> browser,
 
 	CefRefPtr<CefV8Value> obsStudioObj = CefV8Value::CreateObject(0, 0);
 	globalObj->SetValue("obsstudio",
-	                    obsStudioObj,
-	                    V8_PROPERTY_ATTRIBUTE_NONE);
+			obsStudioObj, V8_PROPERTY_ATTRIBUTE_NONE);
 
 	CefRefPtr<CefV8Value> pluginVersion =
 		CefV8Value::CreateString(OBS_BROWSER_VERSION);
 	obsStudioObj->SetValue("pluginVersion",
-	                       pluginVersion,
-	                       V8_PROPERTY_ATTRIBUTE_NONE);
+			pluginVersion, V8_PROPERTY_ATTRIBUTE_NONE);
 
 	CefRefPtr<CefV8Value> func =
 		CefV8Value::CreateFunction("getCurrentScene", this);
   	obsStudioObj->SetValue("getCurrentScene",
-	                       func,
-	                       V8_PROPERTY_ATTRIBUTE_NONE);
+			func, V8_PROPERTY_ATTRIBUTE_NONE);
 
 	CefRefPtr<CefV8Value> getStatus =
 		CefV8Value::CreateFunction("getStatus", this);
 	obsStudioObj->SetValue("getStatus",
-	                       getStatus,
-	                       V8_PROPERTY_ATTRIBUTE_NONE);
+			getStatus, V8_PROPERTY_ATTRIBUTE_NONE);
 }
 
 void BrowserApp::ExecuteJSFunction(CefRefPtr<CefBrowser> browser,
@@ -74,7 +70,7 @@ void BrowserApp::ExecuteJSFunction(CefRefPtr<CefBrowser> browser,
 		browser->GetMainFrame()->GetV8Context();
 
 	context->Enter();
-	
+
 	CefRefPtr<CefV8Value> globalObj = context->GetGlobal();
 	CefRefPtr<CefV8Value> obsStudioObj = globalObj->GetValue("obsstudio");
 	CefRefPtr<CefV8Value> jsFunction = obsStudioObj->GetValue(functionName);
@@ -118,7 +114,7 @@ bool BrowserApp::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 			json["detail"] = args->GetString(1).ToString();
 		std::string jsonString = Json(json).dump();
 		std::string script;
-		
+
 		script += "new CustomEvent('";
 		script += args->GetString(0).ToString();
 		script += "', ";
@@ -128,8 +124,8 @@ bool BrowserApp::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 		CefRefPtr<CefV8Value> returnValue;
 		CefRefPtr<CefV8Exception> exception;
 
-		// Create the CustomEvent object
-		// We have to use eval to invoke the new operator
+		/* Create the CustomEvent object
+		 * We have to use eval to invoke the new operator */
 		context->Eval(script, browser->GetMainFrame()->GetURL(),
 				0, returnValue, exception);
 
@@ -147,7 +143,7 @@ bool BrowserApp::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 			browser->GetMainFrame()->GetV8Context();
 		CefRefPtr<CefV8Value> retval;
 		CefRefPtr<CefV8Exception> exception;
-        
+
 		context->Enter();
 
 		CefRefPtr<CefListValue> arguments = message->GetArgumentList();
@@ -168,7 +164,7 @@ bool BrowserApp::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 		args.push_back(retval);
 
 		callback->ExecuteFunction(NULL, args);
-        
+
 		context->Exit();
 
 		callbackMap.erase(callbackID);
@@ -217,7 +213,7 @@ bool BrowserApp::Execute(const CefString &name,
 		browser->SendProcessMessage(PID_BROWSER, msg);
 
 	} else {
-		// Function does not exist.
+		/* Function does not exist. */
 		return false;
 	}
 

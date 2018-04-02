@@ -1,6 +1,10 @@
 #include "browser-client.hpp"
 #include "jim-browser-source.hpp"
 #include "base64/base64.hpp"
+#include "json11/json11.hpp"
+#include <obs-frontend-api.h>
+
+using namespace json11;
 
 CefRefPtr<CefRenderHandler> BrowserClient::GetRenderHandler()
 {
@@ -54,8 +58,37 @@ bool BrowserClient::OnProcessMessageReceived(
 	CefProcessId,
 	CefRefPtr<CefProcessMessage> message)
 {
-	// TODO
-	return false;
+	const std::string &name = message->GetName();
+	Json json;
+
+	if (name == "getCurrentScene") {
+		json = Json::object {
+			{"name", obs_source_get_name(bs->source)},
+			{"width", (int)obs_source_get_width(bs->source)},
+			{"height", (int)obs_source_get_height(bs->source)}
+		};
+
+	} else if (name == "getStatus") {
+		json = Json::object {
+			{"recording", obs_frontend_recording_active()},
+			{"streaming", obs_frontend_streaming_active()},
+			{"replaybuffer", obs_frontend_replay_buffer_active()}
+		};
+
+	} else {
+		return false;
+	}
+
+	CefRefPtr<CefProcessMessage> msg =
+		CefProcessMessage::Create("executeCallback");
+
+	CefRefPtr<CefListValue> args = msg->GetArgumentList();
+	args->SetInt(0, message->GetArgumentList()->GetInt(0));
+	args->SetString(1, json.dump());
+
+	browser->SendProcessMessage(PID_RENDERER, msg);
+
+	return true;
 }
 
 bool BrowserClient::GetViewRect(
@@ -78,17 +111,19 @@ void BrowserClient::OnPaint(
 		if (bs->width != width || bs->height != height) {
 			obs_enter_graphics();
 			bs->DestroyTextures();
-			if (width && height) {
-				bs->texture = gs_texture_create(
-						width, height, GS_RGBA, 1,
-						(const uint8_t **)&buffer,
-						GS_DYNAMIC);
-				bs->width = width;
-				bs->height = height;
-			}
 			obs_leave_graphics();
+		}
 
-		} else if (bs->texture) {
+		if (!bs->texture && width && height) {
+			obs_enter_graphics();
+			bs->texture = gs_texture_create(
+					width, height, GS_RGBA, 1,
+					(const uint8_t **)&buffer,
+					GS_DYNAMIC);
+			bs->width = width;
+			bs->height = height;
+			obs_leave_graphics();
+		} else {
 			obs_enter_graphics();
 			gs_texture_set_image(bs->texture,
 					(const uint8_t *)buffer,
@@ -101,6 +136,8 @@ void BrowserClient::OnPaint(
 			obs_enter_graphics();
 			gs_texture_destroy(bs->popup_texture);
 			bs->popup_texture = nullptr;
+			bs->popup_width = 0;
+			bs->popup_height = 0;
 
 			if (width && height) {
 				bs->popup_texture = gs_texture_create(

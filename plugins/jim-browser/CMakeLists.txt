@@ -57,7 +57,7 @@ endif()
 set(jim-browser_SOURCES
 	jim-browser/jim-browser-plugin.cpp
 	jim-browser/jim-browser-source.cpp
-	jim-browser/jim-browser-source-software.cpp
+	jim-browser/jim-browser-source-windows.cpp
 	jim-browser/browser-scheme.cpp
 	jim-browser/browser-client.cpp
 	jim-browser/browser-app.cpp
@@ -68,9 +68,9 @@ set(jim-browser_SOURCES
 set(jim-browser_HEADERS
 	jim-browser/jim-browser-source.hpp
 	jim-browser/browser-scheme.hpp
-	jim-browser/browser-version.h
 	jim-browser/browser-client.hpp
 	jim-browser/browser-app.hpp
+	browser-version.h
 	deps/json11/json11.hpp
 	deps/base64/base64.hpp
 	cef-headers.hpp
@@ -90,6 +90,14 @@ target_link_libraries(jim-browser
 
 set(cef-jimstrap_SOURCES
 	cef-jimstrap/cef-jimstrap-main.cpp
+	jim-browser/browser-app.cpp
+	deps/json11/json11.cpp
+	)
+set(cef-jimstrap_HEADERS
+	cef-jimstrap/cef-jimstrap-main.cpp
+	jim-browser/browser-app.hpp
+	deps/json11/json11.hpp
+	cef-headers.hpp
 	)
 
 add_executable(cef-jimstrap
@@ -99,6 +107,19 @@ add_executable(cef-jimstrap
 target_link_libraries(cef-jimstrap
 	${CEF_LIBRARIES}
 	)
+
+if (APPLE)
+	set_target_properties(cef-jimstrap PROPERTIES 
+		COMPILE_FLAGS "-mmacosx-version-min=10.8")		
+endif(APPLE)
+
+if (WIN32)
+	set_target_properties(cef-jimstrap PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+endif(WIN32)
+
+if (APPLE AND XCODE)
+	set_xcode_property(cef-jimstrap CLANG_CXX_LIBRARY "libc++")
+endif(APPLE AND XCODE)
 
 # ----------------------------------------------------------------------------
 
