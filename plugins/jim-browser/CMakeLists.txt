@@ -6,6 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/UI/obs-frontend-api")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/deps")
 
 find_package(CEF QUIET)
 
@@ -17,6 +18,7 @@ endif()
 # ----------------------------------------------------------------------------
 
 set(jim-browser_LIBRARIES
+	libobs
 	obs-frontend-api
 	)
 
@@ -55,16 +57,28 @@ endif()
 set(jim-browser_SOURCES
 	jim-browser/jim-browser-plugin.cpp
 	jim-browser/jim-browser-source.cpp
+	jim-browser/jim-browser-source-software.cpp
+	jim-browser/browser-render-handler.cpp
+	jim-browser/browser-load-handler.cpp
 	jim-browser/browser-scheme.cpp
+	jim-browser/browser-client.cpp
+	jim-browser/browser-task.cpp
 	jim-browser/browser-app.cpp
-	json11/json11.cpp
+	deps/json11/json11.cpp
+	deps/base64/base64.cpp
 	wide-string.cpp
 	)
 set(jim-browser_HEADERS
-	jim-browser/browser-version.h
+	jim-browser/jim-browser-source.hpp
+	jim-browser/browser-render-handler.hpp
+	jim-browser/browser-load-handler.hpp
 	jim-browser/browser-scheme.hpp
+	jim-browser/browser-version.h
+	jim-browser/browser-client.hpp
+	jim-browser/browser-task.hpp
 	jim-browser/browser-app.hpp
-	json11/json11.hpp
+	deps/json11/json11.hpp
+	deps/base64/base64.hpp
 	cef-headers.hpp
 	wide-string.hpp
 	)
@@ -76,7 +90,6 @@ add_library(jim-browser MODULE
 
 target_link_libraries(jim-browser
 	${jim-browser_LIBRARIES}
-	libobs
 	)
 
 # ----------------------------------------------------------------------------
