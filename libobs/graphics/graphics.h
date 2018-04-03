@@ -780,6 +780,21 @@ EXPORT void gs_texture_release_dc(gs_texture_t *gdi_tex);
 
 /** creates a windows shared texture from a texture handle */
 EXPORT gs_texture_t *gs_texture_open_shared(uint32_t handle);
+
+#define GS_WAIT_INFINITE (uint32_t)-1
+
+/**
+ * acquires a lock on a keyed mutex texture.
+ * returns -1 on generic failure, ETIMEDOUT if timed out
+ */
+EXPORT int gs_texture_acquire_sync(gs_texture_t *tex, uint64_t key, uint32_t ms);
+
+/**
+ * releases a lock on a keyed mutex texture to another device.
+ * return 0 on success, -1 on error
+ */
+EXPORT int gs_texture_release_sync(gs_texture_t *tex, uint64_t key);
+
 #endif
 
 /* inline functions used by modules */

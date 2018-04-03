@@ -2129,3 +2129,38 @@ extern "C" EXPORT gs_texture_t *device_texture_open_shared(gs_device_t *device,
 
 	return texture;
 }
+
+extern "C" EXPORT int device_texture_acquire_sync(gs_texture_t *tex,
+		uint64_t key, uint32_t ms)
+{
+	gs_texture_2d *tex2d = reinterpret_cast<gs_texture_2d *>(tex);
+	if (tex->type != GS_TEXTURE_2D)
+		return -1;
+
+	ComQIPtr<IDXGIKeyedMutex> keyedMutex(tex2d->texture);
+	if (!keyedMutex)
+		return -1;
+
+	HRESULT hr = keyedMutex->AcquireSync(key, ms);
+	if (hr == S_OK)
+		return 0;
+	else if (hr == WAIT_TIMEOUT)
+		return ETIMEDOUT;
+
+	return -1;
+}
+
+extern "C" EXPORT int device_texture_release_sync(gs_texture_t *tex,
+		uint64_t key)
+{
+	gs_texture_2d *tex2d = reinterpret_cast<gs_texture_2d *>(tex);
+	if (tex->type != GS_TEXTURE_2D)
+		return -1;
+
+	ComQIPtr<IDXGIKeyedMutex> keyedMutex(tex2d->texture);
+	if (!keyedMutex)
+		return -1;
+
+	HRESULT hr = keyedMutex->ReleaseSync(key);
+	return hr == S_OK ? 0 : -1;
+}
