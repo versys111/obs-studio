@@ -50,7 +50,7 @@ struct BrowserSource {
 	BrowserSource(obs_data_t *settings, obs_source_t *source);
 	virtual ~BrowserSource();
 
-	inline void Update(obs_data_t *settings = nullptr);
+	void Update(obs_data_t *settings = nullptr);
 	inline void Render();
 	virtual void SendMouseClick(
 			const struct obs_mouse_event *event,

@@ -49,7 +49,7 @@ BrowserSource::~BrowserSource()
 	*p_prev_next = next;
 }
 
-inline void BrowserSource::Update(obs_data_t *settings)
+void BrowserSource::Update(obs_data_t *settings)
 {
 	if (settings) {
 		isLocalFile = obs_data_get_bool(settings, "is_local_file");
