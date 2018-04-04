@@ -67,19 +67,14 @@ void BrowserSource::Update(obs_data_t *settings)
 	CreateBrowser();
 }
 
-inline void BrowserSource::Render()
+void BrowserSource::Render()
 {
-	if (!texture)
-		return;
-
-#ifdef __APPLE__
-#else
-	gs_effect_t *effect = obs_get_base_effect(
-			OBS_EFFECT_PREMULTIPLIED_ALPHA);
-#endif
-
-	while (gs_effect_loop(effect, "Draw"))
-		obs_source_draw(texture, 0, 0, 0, 0, 0);
+	if (texture) {
+		gs_effect_t *effect = obs_get_base_effect(
+				OBS_EFFECT_PREMULTIPLIED_ALPHA);
+		while (gs_effect_loop(effect, "Draw"))
+			obs_source_draw(texture, 0, 0, 0, 0, false);
+	}
 }
 
 /* ========================================================================= */

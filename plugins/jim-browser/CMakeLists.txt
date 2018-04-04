@@ -15,6 +15,16 @@ if(NOT CEF_FOUND)
 	return()
 endif()
 
+if(WIN32)
+	option(BROWSER_SHARED_TEXTURE_SUPPORT_ENABLED "Enable shared texture support for the browser plugin" OFF)
+
+	configure_file(
+		"${CMAKE_CURRENT_SOURCE_DIR}/browser-config.h.in"
+		"${CMAKE_CURRENT_BINARY_DIR}/browser-config.h")
+endif()
+
+include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+
 # ----------------------------------------------------------------------------
 
 set(jim-browser_LIBRARIES

@@ -1,0 +1,20 @@
+#pragma once
+
+#ifndef ON
+#define ON true
+#endif
+
+#ifndef OFF
+#define OFF false
+#endif
+
+#ifndef TRUE
+#define TRUE true
+#endif
+
+#ifndef FALSE
+#define FALSE false
+#endif
+
+#define BROWSER_SHARED_TEXTURE_SUPPORT_ENABLED \
+	@BROWSER_SHARED_TEXTURE_SUPPORT_ENABLED@

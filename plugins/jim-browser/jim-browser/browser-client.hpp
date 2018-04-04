@@ -10,11 +10,11 @@ class BrowserClient : public CefClient,
                       public CefRenderHandler,
                       public CefLoadHandler {
 
+public:
 	BrowserSource *bs;
 	CefRect popupRect;
 	CefRect originalPopupRect;
 
-public:
 	inline BrowserClient(BrowserSource *bs_) : bs(bs_) {}
 
 	/* CefClient */

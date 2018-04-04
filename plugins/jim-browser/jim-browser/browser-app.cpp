@@ -24,14 +24,18 @@ void BrowserApp::OnBeforeCommandLineProcessing(
 		const CefString &,
 		CefRefPtr<CefCommandLine> command_line)
 {
-	bool enableGPU = command_line->HasSwitch("enable-gpu");
-	CefString type = command_line->GetSwitchValue("type");
+	if (!shared_texture_available) {
+		bool enableGPU = command_line->HasSwitch("enable-gpu");
+		CefString type = command_line->GetSwitchValue("type");
 
-	if (!enableGPU && type.empty()) {
-		command_line->AppendSwitch("disable-gpu");
-		command_line->AppendSwitch("disable-gpu-compositing");
+		if (!enableGPU && type.empty()) {
+			command_line->AppendSwitch("disable-gpu");
+			command_line->AppendSwitch("disable-gpu-compositing");
+		}
+
 	}
 
+	command_line->AppendSwitch("disable-gpu-shader-disk-cache");
 	command_line->AppendSwitch("enable-begin-frame-scheduling");
 	command_line->AppendSwitch("enable-system-flash");
 }
