@@ -38,28 +38,28 @@ if(NOT APPLE)
 	include_directories(${CEF_ROOT_DIR})
 
 	if(MSVC)
-		string(REPLACE "/MD" "/MT" 
-			"CMAKE_C_FLAGS" 
+		string(REPLACE "/MD" "/MT"
+			"CMAKE_C_FLAGS"
 			"${CMAKE_C_FLAGS}")
 
-		string(REPLACE "/MD" "/MT" 
-			"CMAKE_CXX_FLAGS" 
+		string(REPLACE "/MD" "/MT"
+			"CMAKE_CXX_FLAGS"
 			"${CMAKE_CXX_FLAGS}")
 
 		string(TOUPPER "${CMAKE_CONFIGURATION_TYPES}" UPPER_CONFIG_TYPES)
 		foreach(CONFIG_TYPE ${UPPER_CONFIG_TYPES})
-			string(REPLACE "/MD" "/MT" 
-				"CMAKE_C_FLAGS_${CONFIG_TYPE}" 
+			string(REPLACE "/MD" "/MT"
+				"CMAKE_C_FLAGS_${CONFIG_TYPE}"
 				"${CMAKE_C_FLAGS_${CONFIG_TYPE}}")
 
-			string(REPLACE "/MD" "/MT" 
-				"CMAKE_CXX_FLAGS_${CONFIG_TYPE}" 
+			string(REPLACE "/MD" "/MT"
+				"CMAKE_CXX_FLAGS_${CONFIG_TYPE}"
 				"${CMAKE_CXX_FLAGS_${CONFIG_TYPE}}")
 		endforeach()
 	endif()
 else()
-	list(APPEND jim-browser_LIBRARIES 
-		${COCOA_FRAMEWORK} 
+	list(APPEND jim-browser_LIBRARIES
+		${COCOA_FRAMEWORK}
 		${APPKIT_FRAMEWORK}
 		${IOSURFACE_FRAMEWORK})
 endif()
@@ -119,8 +119,8 @@ target_link_libraries(cef-jimstrap
 	)
 
 if (APPLE)
-	set_target_properties(cef-jimstrap PROPERTIES 
-		COMPILE_FLAGS "-mmacosx-version-min=10.8")		
+	set_target_properties(cef-jimstrap PROPERTIES
+		COMPILE_FLAGS "-mmacosx-version-min=10.8")
 endif(APPLE)
 
 if (WIN32)

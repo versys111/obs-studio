@@ -12,5 +12,5 @@ int main(int argc, char *argv[])
 	CefMainArgs mainArgs(argc, argv);
 #endif
 	CefRefPtr<BrowserApp> mainApp(new BrowserApp());
-	return CefExecuteProcess(mainArgs, mainApp.get(), NULL);                   
+	return CefExecuteProcess(mainArgs, mainApp.get(), NULL);
 }

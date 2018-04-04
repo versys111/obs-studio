@@ -57,7 +57,7 @@ void BrowserApp::OnContextCreated(CefRefPtr<CefBrowser> browser,
 
 	CefRefPtr<CefV8Value> func =
 		CefV8Value::CreateFunction("getCurrentScene", this);
-  	obsStudioObj->SetValue("getCurrentScene",
+	obsStudioObj->SetValue("getCurrentScene",
 			func, V8_PROPERTY_ATTRIBUTE_NONE);
 
 	CefRefPtr<CefV8Value> getStatus =
@@ -105,7 +105,7 @@ bool BrowserApp::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 
 		ExecuteJSFunction(browser, "onActiveChange", arguments);
 
-	} else if (message->GetName() == "DispatchJSEvent") {       
+	} else if (message->GetName() == "DispatchJSEvent") {
 		CefRefPtr<CefV8Context> context =
 			browser->GetMainFrame()->GetV8Context();
 
@@ -197,8 +197,8 @@ bool BrowserApp::Execute(const CefString &name,
 		CefRefPtr<CefListValue> args = msg->GetArgumentList();
 		args->SetInt(0, callbackId);
 
-		CefRefPtr<CefBrowser> browser = 
-                	CefV8Context::GetCurrentContext()->GetBrowser();
+		CefRefPtr<CefBrowser> browser =
+			CefV8Context::GetCurrentContext()->GetBrowser();
 		browser->SendProcessMessage(PID_BROWSER, msg);
 
 	} else if (name == "getStatus") {

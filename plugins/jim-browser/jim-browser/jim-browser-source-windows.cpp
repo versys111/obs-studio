@@ -218,9 +218,9 @@ void BrowserSource_Windows::CreateBrowser()
 #endif
 
 		cefBrowser = CefBrowserHost::CreateBrowserSync(
-						windowInfo, 
+						windowInfo,
 						browserClient,
-						url, 
+						url,
 						cefBrowserSettings,
 						nullptr);
 		if (cefBrowser != nullptr)
